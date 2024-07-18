@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Wether Now</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      html {
+        top: 0;
+      }
+      body {
+        background: #222;
+        font-family: "lato", sans-serif;
+      }
+      .card {
+        position: relative;
+        border-radius: 20px;
+        width: 90%;
+        height: auto;
+        max-width: 470px;
+        color: #fff;
+        margin: 100px auto 0;
+        text-align: center;
+        overflow: hidden;
+      }
+      .background-video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: -1;
+      }
+      .city {
+        border: none;
+        border-radius: 50px;
+        outline: 0px;
+        background: #ebfffc;
+        height: 60px;
+        cursor: pointer;
+        flex: 1;
+        width: 68%;
+        margin-top: 18px;
+        padding-left: 30px;
+        font-size: 18px;
+      }
+      .search_button {
+        border: none;
+        outline: 0px;
+        background: #ebfffc;
+        border-radius: 50%;
+        height: 60px;
+        width: 60px;
+        cursor: pointer;
+        margin-left: 2px;
+        margin-top: 10px;
+      }
+      .search_button img {
+        width: 16px;
+      }
+      .include_head {
+        padding: 15px;
+      }
+      .m_img {
+        width: 155px;
+        transition: transform 0.5s ease, opacity 0.5s ease;
+      }
+      .temp {
+        font-family: "lato", sans-serif;
+        font-size: 85px;
+        margin-top: 0px;
+        margin-bottom: 0px;
+      }
+      .city_name {
+        margin-top: 0px;
+        font-size: 50px;
+      }
+      .class_m {
+        display: flex;
+        justify-content: space-around;
+        font-size: 20px;
+      }
+      .class1 {
+        display: flex;
+      }
+      .class1_1 {
+        text-align: left;
+      }
+      .class2_1 {
+        text-align: left;
+      }
+      .class2 {
+        display: flex;
+      }
+      .img1 {
+        margin-right: 10px;
+        padding-top: 5px;
+        width: 40px;
+        height: 40px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <video class="background-video" autoplay loop muted playsinline>
+        <source
+          class="weatherBackGround"
+          src="C:/Users/Dinil/Desktop/my%20project/JS project/video/clear.mp4"
+          type="video/mp4"
+        />
+      </video>
+
+      <div class="include_head">
+        <input type="text" placeholder="enter city name" class="city" />
+        <button class="search_button">
+          <img
+            src="C:/Users/Dinil/Desktop/my%20project/JS project/weather-app-img/search.png"
+            alt=""
+          />
+        </button>
+      </div>
+
+      <div>
+        <img
+          class="m_img"
+          src="C:/Users/Dinil/Desktop/my%20project/JS project/weather-app-img/rain.png"
+          alt=""
+        />
+        <h1 class="temp">22°C</h1>
+        <h2 class="city_name">New York</h2>
+
+        <div class="class_m">
+          <div class="class1">
+            <img
+              class="img1"
+              src="C:/Users/Dinil/Desktop/my%20project/JS project/weather-app-img/humidity.png"
+              alt=""
+            />
+            <div class="class1_1">
+              <span class="humidity">50%</span><br />
+              <span>humidity</span>
+            </div>
+          </div>
+
+          <div class="class2">
+            <img
+              class="img1"
+              src="C:/Users/Dinil/Desktop/my%20project/JS project/weather-app-img/wind.png"
+              alt=""
+            />
+            <div class="class2_1">
+              <span class="wind">15km/h</span><br />
+              <span>Wind Speed</span>
+              <p></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const apiKey = "4a54c4ea118db901508570067c3ccbb0";
+      const apiURL =
+        "https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+      // https://api.openweathermap.org/data/2.5/weather?units=metric
+
+      const searchBox = document.querySelector(".city");
+      const searchBtn = document.querySelector(".search_button");
+      const weatherIcon = document.querySelector(".m_img");
+      const weatherBackGround = document.querySelector(".background-video");
+
+      async function checkWeather(city) {
+        const response = await fetch(apiURL + city + `&appid=${apiKey}`);
+        var data = await response.json();
+
+        console.log(data);
+        document.querySelector(".city_name").innerHTML = data.name;
+        document.querySelector(".temp").innerHTML =
+          Math.round(data.main.temp) + "°C";
+        document.querySelector(".humidity").innerHTML =
+          -data.main.humidity + "%";
+        document.querySelector(".wind").innerHTML = data.wind.speed + " km/p";
+
+        weatherIcon.style.opacity = 0;
+        setTimeout(() => {
+          if (data.weather[0].main == "Clouds") {
+            weatherIcon.src =
+              "C:/Users/Dinil/Desktop/my%20project/JS project/weather-app-img/clouds.png";
+          } else if (data.weather[0].main == "Clear") {
+            weatherIcon.src =
+              "C:/Users/Dinil/Desktop/my%20project/JS project/weather-app-img/clear.png";
+          } else if (data.weather[0].main == "Drizzle") {
+            weatherIcon.src =
+              "C:/Users/Dinil/Desktop/my%20project/JS project/weather-app-img/drizzle.png";
+          } else if (data.weather[0].main == "Mist") {
+            weatherIcon.src =
+              "C:/Users/Dinil/Desktop/my%20project/JS project/weather-app-img/mist.png";
+          } else if (data.weather[0].main == "Rain") {
+            weatherIcon.src =
+              "C:/Users/Dinil/Desktop/my%20project/JS project/weather-app-img/rain.png";
+          } else if (data.weather[0].main == "Snow") {
+            weatherIcon.src =
+              "C:/Users/Dinil/Desktop/my%20project/JS project/weather-app-img/snow.png";
+          }
+
+          if (data.weather[0].main == "Clouds") {
+            weatherBackGround.src =
+              "C:/Users/Dinil/Desktop/my%20project/JS project/video/clouds.mp4";
+          } else if (data.weather[0].main == "Clear") {
+            weatherBackGround.src =
+              "C:/Users/Dinil/Desktop/my%20project/JS project/video/clear.mp4";
+          } else if (data.weather[0].main == "Drizzle") {
+            weatherBackGround.src =
+              "C:/Users/Dinil/Desktop/my%20project/JS project/video/mist.mp4";
+          } else if (data.weather[0].main == "Mist") {
+            weatherBackGround.src =
+              "C:/Users/Dinil/Desktop/my%20project/JS project/video/mist.mp4";
+          } else if (data.weather[0].main == "Rain") {
+            weatherBackGround.src =
+              "C:/Users/Dinil/Desktop/my%20project/JS project/video/rain.mp4";
+          } else if (data.weather[0].main == "Snow") {
+            weatherBackGround.src =
+              "C:/Users/Dinil/Desktop/my%20project/JS project/video/snow.mp4";
+          }
+          weatherIcon.style.opacity = 1;
+        }, 500);
+      }
+      searchBtn.addEventListener("click", () => {
+        checkWeather(searchBox.value);
+      });
+    </script>
+  </body>
+</html>
